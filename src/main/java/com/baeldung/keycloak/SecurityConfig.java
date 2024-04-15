@@ -58,16 +58,18 @@ class SecurityConfig {
     public SecurityFilterChain resourceServerFilterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(auth -> auth
             // Allows preflight requests from browser
-            .requestMatchers(new AntPathRequestMatcher("/customers*", HttpMethod.OPTIONS.name()))
-            .permitAll()
-            .requestMatchers(new AntPathRequestMatcher("/customers*"))
-            .hasRole("user")
-            .requestMatchers(new AntPathRequestMatcher("/users"))
-            .hasRole("user")
-            .requestMatchers(new AntPathRequestMatcher("/"))
-            .permitAll()
-            .anyRequest()
-            .authenticated());
+                .requestMatchers(new AntPathRequestMatcher("/customers*", HttpMethod.OPTIONS.name()))
+                .permitAll()
+                .requestMatchers(new AntPathRequestMatcher("/customers*"))
+                .hasRole("user")
+                .requestMatchers(new AntPathRequestMatcher("/users"))
+                .hasRole("user")
+                .requestMatchers(new AntPathRequestMatcher("/"))
+                .permitAll()
+                .anyRequest()
+                .authenticated())
+            .exceptionHandling().accessDeniedPage("/error")
+        ;
         http.oauth2ResourceServer(oauth2 -> oauth2
             .jwt(Customizer.withDefaults()));
         http.oauth2Login(Customizer.withDefaults())
